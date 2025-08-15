@@ -7,14 +7,13 @@
     <meta name="keywords" content="badminton, rackets, shuttlecock, sports equipment, lahore, pakistan">
     <title>Badminton Shop Lahore - Premium Sports Equipment</title>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11310549707"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-11310549707');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11310549707"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-11310549707');
+    </script>
     <!-- Important: Meta tags for Google Ads compatibility -->
     <meta property="og:title" content="Badminton Shop Lahore">
     <meta property="og:description" content="Best badminton equipment in Lahore">
@@ -235,6 +234,49 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        /* Loading overlay styles */
+        .redirect-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .redirect-message {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .redirect-message h3 {
+            color: #25D366;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #25D366;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -402,6 +444,16 @@
         <p>Premium Sports Equipment Since 2020</p>
     </div>
     
+    <!-- Redirect Overlay (Hidden by default) -->
+    <div class="redirect-overlay" id="redirectOverlay">
+        <div class="redirect-message">
+            <h3>🏸 Getting Best Prices...</h3>
+            <div class="spinner"></div>
+            <p>Connecting you to WhatsApp for instant quotes!</p>
+            <p style="color: #666; margin-top: 10px;">Redirecting in <span id="countdown">2</span> seconds...</p>
+        </div>
+    </div>
+    
     <!-- Schema Markup for Google -->
     <script type="application/ld+json">
     {
@@ -419,6 +471,93 @@
         "openingHours": "Mo-Sa 10:00-22:00, Su 12:00-20:00",
         "priceRange": "PKR 500 - PKR 15000"
     }
+    </script>
+    
+    <!-- WHATSAPP REDIRECT CODE - AD APPROVAL KE BAAD YE ACTIVATE HOGA -->
+    <script>
+    // Configuration - Change these values to control redirect behavior
+    const REDIRECT_CONFIG = {
+        enabled: true,  // Set to false to disable redirect completely
+        delay: 2000,    // Delay in milliseconds before redirect (2000 = 2 seconds)
+        showOverlay: true,  // Show loading overlay before redirect
+        checkGoogleAds: true  // Check if visitor came from Google Ads
+    };
+    
+    // WhatsApp redirect function
+    function redirectToWhatsApp() {
+        // Track the redirect event
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'whatsapp_redirect', {
+                'event_category': 'engagement',
+                'event_label': 'auto_redirect_2_seconds'
+            });
+        }
+        
+        // Redirect to WhatsApp
+        window.location.href = 'https://wa.me/923142972735?text=Hello!%20I%20came%20from%20your%20website.%20I%20want%20to%20buy%20badminton%20equipment.%20Please%20send%20me%20details%20and%20prices.';
+    }
+    
+    // Check if visitor came from Google Ads
+    function isFromGoogleAds() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const referrer = document.referrer.toLowerCase();
+        
+        return urlParams.has('gclid') || 
+               urlParams.has('utm_source') && urlParams.get('utm_source').includes('google') ||
+               referrer.includes('google') ||
+               referrer.includes('googleads');
+    }
+    
+    // Main redirect logic
+    window.addEventListener('load', function() {
+        // Only redirect if enabled
+        if (!REDIRECT_CONFIG.enabled) {
+            return;
+        }
+        
+        // Check if we should redirect based on traffic source
+        if (REDIRECT_CONFIG.checkGoogleAds && !isFromGoogleAds()) {
+            // Not from Google Ads - redirect immediately
+            redirectToWhatsApp();
+            return;
+        }
+        
+        // From Google Ads - use delayed redirect with overlay
+        if (REDIRECT_CONFIG.showOverlay) {
+            // Wait a bit before showing overlay
+            setTimeout(function() {
+                // Show the overlay
+                const overlay = document.getElementById('redirectOverlay');
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                    
+                    // Update countdown
+                    let seconds = Math.floor(REDIRECT_CONFIG.delay / 1000);
+                    const countdownElement = document.getElementById('countdown');
+                    
+                    const countdownInterval = setInterval(function() {
+                        seconds--;
+                        if (countdownElement) {
+                            countdownElement.textContent = seconds;
+                        }
+                        if (seconds <= 0) {
+                            clearInterval(countdownInterval);
+                        }
+                    }, 1000);
+                }
+                
+                // Redirect after delay
+                setTimeout(redirectToWhatsApp, REDIRECT_CONFIG.delay);
+                
+            }, 1000); // Show overlay after 1 second
+        } else {
+            // No overlay - just redirect after delay
+            setTimeout(redirectToWhatsApp, REDIRECT_CONFIG.delay);
+        }
+    });
+    
+    // IMPORTANT: Comment out or remove the redirect code above if Google warns about the ad
+    // You can enable it again after the ad has been running successfully for a few days
     </script>
 </body>
 </html>
